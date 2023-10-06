@@ -181,7 +181,7 @@ function AdminPage() {
       console.log("Test2 Poll " + poll);
       console.log("Test3 Poll " + pollstation);
       const product2 = await getDocs(
-        collection(fireDB, `${poll}/Pollings/stations`)
+        collection(fireDB, `${poll}/ByElections/stations`)
       );
 
       const productsArray2 = [];
@@ -327,21 +327,21 @@ function AdminPage() {
       const pascalCaseWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
       words = pascalCaseWords.join('_');
 
-      const docRef = doc(fireDB, `${primary_poll}/Pollings/stations/${words.replace(/[\s,]/g, '_')}/voter_count/bucopho`);
+      const docRef = doc(fireDB, `${poll}/Pollings/stations/${words.replace(/[\s,]/g, '_')}/voter_count/Bucopho`);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         const data = docSnap.data();
 
         const mpData = {
-          valid: data.votes.valid,
-          invalid: data.votes.invalid,
-          spoilt: data.votes.spoilt,
-          tendered: data.votes.tendered,
+          valid: data.valid,
+          invalid: data.invalid,
+          spoilt: data.spoilt,
+          tendered: data.tendered,
         };
 
         setTurnoutBucopho(mpData);
-        console.log("Data From Bucopho: ", data.votes.valid);
+        console.log("Data From Bucopho: ", data.valid);
       } else {
         console.log("Document does not exist");
       }
@@ -540,7 +540,7 @@ function AdminPage() {
 
         // Update the Firestore document with the updated object
         await setDoc(
-          doc(fireDB, `${poll}/Pollings/stations`, product.id),
+          doc(fireDB, `${poll}/ByElections/stations`, product.id),
           product
         );
         toast.success("Turnout has successfully added");
@@ -561,13 +561,13 @@ function AdminPage() {
   };
 
   useEffect(() => {
-    getOrdersData();
-    getTinkhundlaData();
+    // getOrdersData();
+    // getTinkhundlaData();
     getPollingsData();
     getBucophoData();
-    getMPData();
-    getIndvunaData();
-    getIndvunaData2();
+    // getMPData();
+    // getIndvunaData();
+    // getIndvunaData2();
     getBucophoTurnData();
   }, []);
 
@@ -644,7 +644,7 @@ function AdminPage() {
 
     try {
       const voterCountRef = await setDoc(
-        doc(fireDB, `${primary_poll}/Pollings/stations/${words.replace(/[\s,]/g, '_')}/voter_count`, "Bucopho"),
+        doc(fireDB, `${poll}/Pollings/stations/${words.replace(/[\s,]/g, '_')}/voter_count`, "Bucopho"),
         {
           tendered: parseInt(item.tendered, 10),
           spoilt: parseInt(item.spoilt, 10),
@@ -750,7 +750,7 @@ function AdminPage() {
                       if (statusText === "Open") {
                         // Update the 'open_time' field to the current time
                         await updateDoc(
-                          doc(fireDB, `${primary_poll}/Pollings/stations/${item.id}`),
+                          doc(fireDB, `${poll}/ByElections/stations/${item.id}`),
                           {
                             status: updatedStatus,
                             close_time: openDateTime,
@@ -760,7 +760,7 @@ function AdminPage() {
                       } else if (statusText === "Closed") {
                         // Update the 'close_time' field to the current time
                         await updateDoc(
-                          doc(fireDB, `${primary_poll}/Pollings/stations/${item.id}`),
+                          doc(fireDB, `${poll}/ByElections/stations/${item.id}`),
                           {
                             status: updatedStatus,
                             open_time: openDateTime,
@@ -785,7 +785,7 @@ function AdminPage() {
                       if (statusText2 === "Open") {
                         // Update the 'open_time' field to the current time
                         await updateDoc(
-                          doc(fireDB, `${primary_poll}/Pollings/stations/${item.id}`),
+                          doc(fireDB, `${poll}/ByElections/stations/${item.id}`),
                           {
                             countStatus: updatedStatus,
                             countEnd: openDateTime,
@@ -794,7 +794,7 @@ function AdminPage() {
                       } else if (statusText2 === "Closed") {
                         // Update the 'close_time' field to the current time
                         await updateDoc(
-                          doc(fireDB, `${primary_poll}/Pollings/stations/${item.id}`),
+                          doc(fireDB, `${poll}/ByElections/stations/${item.id}`),
                           {
                             countStatus: updatedStatus,
                             countStart: openDateTime,
